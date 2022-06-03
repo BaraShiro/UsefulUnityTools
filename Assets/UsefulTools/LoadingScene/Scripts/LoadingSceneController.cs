@@ -36,7 +36,8 @@ namespace UsefulTools.LoadingScene
             sceneToLoad = sceneName;
         
             FadeToBlack.ToBlack();
-            yield return new WaitForSecondsRealtime(1f);
+
+            yield return FadeToBlack.WaitForEndOfAnimation();
         
             SceneManager.LoadSceneAsync("Loading");
         }
@@ -44,7 +45,8 @@ namespace UsefulTools.LoadingScene
         private IEnumerator Load()
         {
             FadeToBlack.FromBlack();
-            yield return new WaitForSecondsRealtime(1f);
+
+            yield return FadeToBlack.WaitForEndOfAnimation();
         
             loadingOperation = SceneManager.LoadSceneAsync(sceneToLoad);
             loadingOperation.allowSceneActivation = false;
@@ -56,7 +58,8 @@ namespace UsefulTools.LoadingScene
                 if (loadingOperation.progress >= 0.9f)
                 {
                     FadeToBlack.ToBlack();
-                    yield return new WaitForSecondsRealtime(1f);
+
+                    yield return FadeToBlack.WaitForEndOfAnimation();
                 
                     loadingOperation.allowSceneActivation = true;
                 

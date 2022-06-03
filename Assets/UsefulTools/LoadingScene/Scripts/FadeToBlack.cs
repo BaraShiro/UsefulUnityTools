@@ -37,8 +37,8 @@ namespace UsefulTools.LoadingScene
 
         private Animator fadeToBlackAnimator;
 
-        private static readonly int AlphaUp = Animator.StringToHash("AlphaUp");
-        private static readonly int AlphaDown = Animator.StringToHash("AlphaDown");
+        private static readonly int toBlack = Animator.StringToHash("ToBlack");
+        private static readonly int fromBlack = Animator.StringToHash("FromBlack");
 
         private void Awake()
         {
@@ -66,12 +66,18 @@ namespace UsefulTools.LoadingScene
 
         public static void ToBlack()
         {
-            Instance.fadeToBlackAnimator.SetTrigger(AlphaUp);
+            Instance.fadeToBlackAnimator.SetTrigger(toBlack);
         }
 
         public static void FromBlack()
         {
-            Instance.fadeToBlackAnimator.SetTrigger(AlphaDown);
+            Instance.fadeToBlackAnimator.SetTrigger(fromBlack);
+        }
+        
+        public static IEnumerator WaitForEndOfAnimation()
+        {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForSecondsRealtime(Instance.fadeToBlackAnimator.GetCurrentAnimatorStateInfo(0).length);
         }
     }
 }
