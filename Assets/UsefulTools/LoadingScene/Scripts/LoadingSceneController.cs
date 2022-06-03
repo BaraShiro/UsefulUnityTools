@@ -9,6 +9,30 @@ namespace UsefulTools.LoadingScene
 {
     public class LoadingSceneController : MonoBehaviour
     {
+        private class CoroutineStarter : MonoBehaviour
+        {
+                    
+            private static CoroutineStarter starter;
+        
+            private static CoroutineStarter Starter
+            {
+                get
+                {
+                    if (starter == null)
+                    {
+                        starter = new GameObject().AddComponent<CoroutineStarter>();
+                    }
+        
+                    return starter;
+                }
+            }
+
+            public static void StartCoroutineProxy(IEnumerator routine)
+            {
+                Starter.StartCoroutine(routine);
+            }
+        }
+        
         private static string sceneToLoad = "";
     
         [SerializeField]
@@ -26,7 +50,12 @@ namespace UsefulTools.LoadingScene
             StartCoroutine(Load());
         }
 
-        public static IEnumerator LoadScene([NotNull] string sceneName)
+        public static void LoadScene([NotNull] string sceneName)
+        {
+            CoroutineStarter.StartCoroutineProxy(LoadSceneRoutine(sceneName));
+        }
+
+        private static IEnumerator LoadSceneRoutine([NotNull] string sceneName)
         {
             if (string.IsNullOrEmpty(sceneName))
             {

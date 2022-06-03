@@ -7,6 +7,6 @@ public class MainMenuButton : MonoBehaviour
 {
     public void Load(string scene)
     {
-        StartCoroutine(LoadingSceneController.LoadScene(scene));
+        LoadingSceneController.LoadScene(scene);
     }
 }
