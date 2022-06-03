@@ -10,6 +10,7 @@ Example scenes showing the loading scene, enforce aspect ratio, and FPS counter 
 
 Calling `StartCoroutine(LoadingSceneController.LoadScene(scene))` loads the scene `scene` via the loading screen.
 The script does not need to be attached to a GameObject, and no special GameObject needs to be present in the current scene, or the scene to be loaded.
+However the scene `Loading` needs to be added to the build settings.
 
 ### EnforceAspectRatio
 
@@ -41,10 +42,10 @@ Uses a dictionary to cache and retrieve `WaitForSeconds` yield instructions.
 Translates a position on a canvas to a position in world space.
 
 `ClampAngle(angle, min, max)`
-Normalizes an angel to a range from -180 to 180 and clamps it between min and max.
+Normalizes an angle to a range from -180 to 180 and clamps it between min and max.
 
 `NormalizeAngle(angle)`
-Normalizes an angel to a range from 0 to 360.
+Normalizes an angle to a range from 0 to 360.
 
 ### Extensions
 
