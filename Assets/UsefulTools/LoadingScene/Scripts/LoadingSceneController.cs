@@ -34,7 +34,8 @@ namespace UsefulTools.LoadingScene
         }
         
         private static string sceneToLoad = "";
-    
+        private static bool sceneLoaded;
+
         [SerializeField]
         private Slider progressBar;
     
@@ -47,7 +48,21 @@ namespace UsefulTools.LoadingScene
 
         private void Start()
         {
+            DontDestroyOnLoad(this);
             StartCoroutine(Load());
+        }
+        
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            sceneLoaded = true;
+        }
+
+        private static IEnumerator WaitUntilSceneIsLoaded()
+        {
+            while (!sceneLoaded)
+            {
+                yield return null;
+            }
         }
 
         public static void LoadScene([NotNull] string sceneName)
@@ -73,17 +88,20 @@ namespace UsefulTools.LoadingScene
 
         private IEnumerator Load()
         {
+
+            sceneLoaded = false;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            
             FadeToBlack.FromBlack();
 
             yield return FadeToBlack.WaitForEndOfAnimation();
-        
+            
             loadingOperation = SceneManager.LoadSceneAsync(sceneToLoad);
             loadingOperation.allowSceneActivation = false;
         
             while (!loadingOperation.isDone)
             {
                 progressBar.value = Mathf.Clamp01(loadingOperation.progress / 0.9f);
-
                 if (loadingOperation.progress >= 0.9f)
                 {
                     FadeToBlack.ToBlack();
@@ -91,15 +109,18 @@ namespace UsefulTools.LoadingScene
                     yield return FadeToBlack.WaitForEndOfAnimation();
                 
                     loadingOperation.allowSceneActivation = true;
-                
-                    FadeToBlack.FromBlack();
+                    
                     break;
                 }
 
                 yield return new WaitForEndOfFrame();
             }
-        
-            yield return null;
+
+            yield return WaitUntilSceneIsLoaded();
+
+            FadeToBlack.FromBlack();
+            
+            Destroy(gameObject);
         }
     
     }
